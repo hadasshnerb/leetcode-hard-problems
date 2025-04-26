@@ -1,0 +1,26 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+        stack = []
+        res = 0
+        num = 0
+        sign = 1  # 1 for '+', -1 for '-'
+
+        for c in s:
+            if c.isdigit():
+                num = num * 10 + int(c)  # Build multi-digit number
+            elif c in '+-':
+                res += sign * num  # Add previous number to result
+                num = 0
+                sign = 1 if c == '+' else -1  # Update sign for next number
+            elif c == '(':
+                stack.append(res)  # Push current result to stack
+                stack.append(sign)  # Push current sign to stack
+                res = 0  # Reset result for new expression inside parentheses
+                sign = 1
+            elif c == ')':
+                res += sign * num  # Add last number inside parentheses
+                num = 0
+                res *= stack.pop()  # Apply the sign before the parentheses
+                res += stack.pop()  # Add result before the parentheses
+
+        return res + sign * num  # Return final result
