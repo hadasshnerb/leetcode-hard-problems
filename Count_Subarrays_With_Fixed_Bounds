@@ -1,0 +1,17 @@
+class Solution:
+    def countSubarrays(self, nums: list[int], minK: int, maxK: int) -> int:
+        res = 0
+        last_min = last_max = last_invalid = -1  # track last positions 
+
+        for i, num in enumerate(nums):
+            if not (minK <= num <= maxK):
+                last_invalid = i  # update last invalid index
+            if num == minK:
+                last_min = i  # update last minK index
+            if num == maxK:
+                last_max = i  # update last maxK index
+
+            # count valid subarrays ending at i
+            res += max(0, min(last_min, last_max) - last_invalid)
+
+        return res
